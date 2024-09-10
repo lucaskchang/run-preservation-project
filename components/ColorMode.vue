@@ -1,13 +1,10 @@
 <template>
   <ClientOnly>
-    <UButton
-      :icon="
-        isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
-      "
-      color="gray"
-      class="fixed right-0 top-0 m-4"
-      size="xl"
-      @click="isDark = !isDark"
+    <UToggle
+      v-model="isDark"
+      size="lg"
+      :off-icon="'i-heroicons-sun-20-solid'"
+      :on-icon="'i-heroicons-moon-20-solid'"
     />
     <template #fallback>
       <div class="size-8" />
