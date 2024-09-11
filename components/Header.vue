@@ -2,16 +2,16 @@
   <div class="flex w-full flex-row items-center justify-between px-6 py-4">
     <div class="flex flex-row">
       <img
-        :src="pfp"
+        :src="userInfo.pfp"
         alt="Profile Picture"
         class="size-12 rounded-full"
       >
       <div class="ml-2 flex flex-col justify-center">
         <p class="font-bold">
-          {{ name }}
+          {{ userInfo.username }}
         </p>
         <p class="-mt-1 text-gray-600 dark:text-gray-300">
-          {{ email }}
+          {{ userInfo.email }}
         </p>
       </div>
     </div>
@@ -20,8 +20,20 @@
 </template>
 
 <script setup lang="ts">
-import { useUserInfoStore } from '~/stores/userInfo';
+const user = useCurrentUser();
 
-const userInfoStore = useUserInfoStore();
-const { name, email, pfp } = storeToRefs(userInfoStore);
+const userInfo = computed(() => {
+  if (user.value) {
+    return {
+      pfp: user.value.photoURL,
+      username: user.value.displayName,
+      email: user.value.email,
+    };
+  }
+  return {
+    pfp: '/default-pfp.png',
+    username: 'Anonymous',
+    email: '',
+  };
+});
 </script>

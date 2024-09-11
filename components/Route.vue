@@ -30,7 +30,7 @@
         Other Ratings
       </p>
       <div
-        v-for="review in props.route.ratings"
+        v-for="review in reactiveRoutes[0].ratings"
         :key="review.user"
         class="text-left"
       >
@@ -48,10 +48,11 @@
 <script setup lang="ts">
 import { useFirestore } from 'vuefire';
 import { collection, getDoc, setDoc, doc } from 'firebase/firestore';
-import { useUserInfoStore } from '~/stores/userInfo';
+import { useRoutesStore } from '~/stores/routes';
 
-const userInfoStore = useUserInfoStore();
-const { email } = storeToRefs(userInfoStore);
+const user = useCurrentUser();
+const routesStore = useRoutesStore();
+const { reactiveRoutes } = storeToRefs(routesStore);
 const db = useFirestore();
 const rating = ref(0);
 
@@ -78,11 +79,11 @@ watchDebounced(rating, async (value) => {
   const data = docInfo.data();
   const ratings = data.ratings;
   // add rating if rating from email doesn't exist
-  const index = ratings.findIndex(rating => rating.user === email.value);
+  const index = ratings.findIndex(rating => rating.user === user.value.email);
   if (index === -1) {
     ratings.push({
       rating: value,
-      user: email.value,
+      user: user.value.email,
     });
   }
   else {

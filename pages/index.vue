@@ -15,28 +15,25 @@
 
 <script setup lang="ts">
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { useUserInfoStore } from '~/stores/userInfo';
-import { useRoutesStore } from '~/stores/routes';
 
-const routesStore = useRoutesStore();
-const userInfoStore = useUserInfoStore();
-
-const provider = new GoogleAuthProvider();
+const user = useCurrentUser();
 
 function login() {
+  const provider = new GoogleAuthProvider();
   const auth = getAuth();
   signInWithPopup(auth, provider)
-    .then((result) => {
-      const user = result.user;
-      userInfoStore.setUserInfo(user);
+    .then(() => {
       navigateTo('/home');
     }).catch((error) => {
       console.log(error);
     });
 }
 
-onMounted(() => {
-  routesStore.getRoutes();
+watch(() => user.value, (value) => {
+  if (value) {
+    console.log('User is logged in');
+    navigateTo('/home');
+  }
 });
 
 definePageMeta({

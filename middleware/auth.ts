@@ -1,8 +1,7 @@
-import { useUserInfoStore } from '~/stores/userInfo';
-
-export default defineNuxtRouteMiddleware((to, from) => {
-  const userInfoStore = useUserInfoStore();
-  if (!userInfoStore.name && to.path !== '/') {
+export default defineNuxtRouteMiddleware((to) => {
+  const user = useCurrentUser();
+  console.log('user', user.value);
+  if (!user.value && to.path !== '/') {
     return navigateTo('/');
   }
 });
