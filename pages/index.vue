@@ -1,14 +1,17 @@
 <template>
   <div class="flex h-screen flex-col items-center justify-center text-center text-gray-950 transition duration-300 ease-in-out dark:bg-gray-950 dark:text-white">
-    <p class="text-5xl font-bold">
-      RPP Ratings
+    <p class="text-6xl font-bold">
+      Run Preservation Project Ratings
+    </p>
+    <p class="mt-4 text-2xl">
+      Rate and review all the routes on the RPP
     </p>
     <UButton
       icon="i-mdi-google"
-      class="mt-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+      class="mt-4 px-4 py-2 font-bold"
       @click="login"
     >
-      Login with Google
+      Login to Get Started
     </UButton>
   </div>
 </template>

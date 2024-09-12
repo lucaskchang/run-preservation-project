@@ -25,7 +25,7 @@
         Your rating: {{ rating === -1 ? 'N/A' : rating }}
       </p>
     </div>
-    <div class="space-y-2 text-left">
+    <div class="text-left">
       <p class="text-2xl font-bold">
         Ratings
       </p>
@@ -33,12 +33,17 @@
         v-for="review in props.route.ratings"
         :key="review.user"
       >
-        <p class="font-bold">
-          {{ review.user }}
-        </p>
-        <p>
-          Rating: {{ review.rating }}
-        </p>
+        <div
+          v-if="review.rating !== -1"
+          class="mt-2"
+        >
+          <p class="font-bold">
+            {{ review.user }}
+          </p>
+          <p>
+            Rating: {{ review.rating }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -87,7 +92,7 @@ watchDebounced(rating, async (value) => {
     ...data,
     ratings,
   });
-}, { debounce: 1000, maxWait: 5000 });
+}, { debounce: 500, maxWait: 2500 });
 
 watch(() => props.route, () => {
   rating.value = props.route.ratings.find(rating => rating.user === user.value.email)?.rating ?? -1;

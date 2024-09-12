@@ -3,6 +3,7 @@
     <UToggle
       v-model="isDark"
       size="lg"
+      class="mr-2"
       :off-icon="'i-heroicons-sun-20-solid'"
       :on-icon="'i-heroicons-moon-20-solid'"
     />
