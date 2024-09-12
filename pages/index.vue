@@ -31,7 +31,6 @@ function login() {
 
 watch(() => user.value, (value) => {
   if (value) {
-    console.log('User is logged in');
     navigateTo('/home');
   }
 });

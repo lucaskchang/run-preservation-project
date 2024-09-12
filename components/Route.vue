@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-full space-y-4 text-center md:w-2/3 2xl:w-1/2">
+  <div class="space-y-4 text-center">
     <div>
       <p class="text-4xl font-bold">
         {{ props.route.name }}
@@ -22,17 +22,16 @@
         :max="100"
       />
       <p>
-        Your rating: {{ rating }}
+        Your rating: {{ rating === -1 ? 'N/A' : rating }}
       </p>
     </div>
-    <div class="space-y-2">
+    <div class="space-y-2 text-left">
       <p class="text-2xl font-bold">
-        Other Ratings
+        Ratings
       </p>
       <div
-        v-for="review in reactiveRoutes[0].ratings"
+        v-for="review in props.route.ratings"
         :key="review.user"
-        class="text-left"
       >
         <p class="font-bold">
           {{ review.user }}
@@ -48,13 +47,6 @@
 <script setup lang="ts">
 import { useFirestore } from 'vuefire';
 import { collection, getDoc, setDoc, doc } from 'firebase/firestore';
-import { useRoutesStore } from '~/stores/routes';
-
-const user = useCurrentUser();
-const routesStore = useRoutesStore();
-const { reactiveRoutes } = storeToRefs(routesStore);
-const db = useFirestore();
-const rating = ref(0);
 
 const props = defineProps<{
   route: {
@@ -71,14 +63,16 @@ const props = defineProps<{
   }
 }>();
 
+const user = useCurrentUser();
+const db = useFirestore();
+const routesCollection = collection(db, 'routes');
+const rating = ref(-1);
+
 watchDebounced(rating, async (value) => {
-  console.log(value);
-  const routesCollection = collection(db, 'routes');
   const docRef = doc(routesCollection, props.route.id);
   const docInfo = await getDoc(docRef);
   const data = docInfo.data();
   const ratings = data.ratings;
-  // add rating if rating from email doesn't exist
   const index = ratings.findIndex(rating => rating.user === user.value.email);
   if (index === -1) {
     ratings.push({
@@ -94,4 +88,12 @@ watchDebounced(rating, async (value) => {
     ratings,
   });
 }, { debounce: 1000, maxWait: 5000 });
+
+watch(() => props.route, () => {
+  rating.value = props.route.ratings.find(rating => rating.user === user.value.email)?.rating ?? -1;
+});
+
+onMounted(async () => {
+  rating.value = props.route.ratings.find(rating => rating.user === user.value.email)?.rating ?? -1;
+});
 </script>
