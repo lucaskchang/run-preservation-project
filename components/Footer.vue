@@ -26,9 +26,9 @@ docs.forEach(async (doc) => {
     ...doc.data(),
     id: doc.id,
   });
+  console.log('Document written with ID: ', doc.id);
 });
-</script>
--->
+</script> -->
 
 <!--
 script to add routes to firestore
@@ -49,5 +49,4 @@ onMounted(async () => {
     console.log('Document written with ID: ', docRef.id);
   }
 });
-</script>
--->
+</script> -->
