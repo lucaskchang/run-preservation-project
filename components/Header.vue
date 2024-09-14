@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-row items-center justify-between px-4 py-2">
-    <NuxtLink to="/account">
+    <NuxtLink :to="user ? '/users/' + user.email : '/login'">
       <div class="flex flex-row rounded p-2 hover:bg-gray-200 dark:hover:bg-gray-800">
         <img
           :src="userInfo.pfp"

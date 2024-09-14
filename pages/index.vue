@@ -20,6 +20,7 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 const user = useCurrentUser();
+const route = useRoute();
 
 function login() {
   const provider = new GoogleAuthProvider();
@@ -34,7 +35,12 @@ function login() {
 
 watch(() => user.value, (value) => {
   if (value) {
-    navigateTo('/home');
+    if (route.query.redirect) {
+      navigateTo(route.query.redirect as string);
+    }
+    else {
+      navigateTo('/home');
+    }
   }
 });
 

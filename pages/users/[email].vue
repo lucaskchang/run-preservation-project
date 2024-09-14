@@ -9,13 +9,14 @@ import { useRoutesStore } from '~/stores/routes';
 
 const routesStore = useRoutesStore();
 const { routes } = storeToRefs(routesStore);
-const user = useCurrentUser();
+const path = useRoute();
+const email = path.params.email;
 
 const ratings = computed(() => {
   const ratings = [];
   for (const route of routes.value) {
     for (const rating of route.ratings) {
-      if (rating.user === user.value?.email) {
+      if (rating.user === email) {
         if (rating.rating !== -1) {
           ratings.push({
             route: route.name,

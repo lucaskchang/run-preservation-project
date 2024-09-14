@@ -12,9 +12,16 @@
       </p>
     </div>
     <iframe
+      v-if="route.link !== '#N/A'"
       :src="route.link"
       class="h-96 w-full rounded-lg"
     />
+    <div
+      v-else
+      class="flex h-96 w-full items-center justify-center rounded-lg text-2xl font-bold ring-2 ring-gray-300 dark:ring-gray-700"
+    >
+      No preview available
+    </div>
     <p class="text-lg italic text-gray-700 dark:text-gray-200">
       {{ route.notes }}
     </p>
@@ -78,19 +85,21 @@ const route = computed(() => {
   rating.value = foundRoute.ratings.find(rating => rating.user === user.value.email)?.rating ?? -1;
   return foundRoute;
 });
-
-watchDebounced(rating, async (value, oldValue) => {
-  if (value === oldValue) return;
-  const docRef = doc(routesCollection, route.value.id);
-  await updateDoc(docRef, {
-    ratings: [
-      ...route.value.ratings.filter(rating => rating.user !== user.value.email),
-      {
-        rating: value,
-        date: new Date().toISOString(),
-        user: user.value.email,
-      },
-    ],
-  });
-}, { debounce: 500, maxWait: 2500 });
+onMounted(() => {
+  watchDebounced(rating, async (value, oldValue) => {
+    if (value === oldValue || value === -1) return;
+    console.log('Updating rating to', value);
+    const docRef = doc(routesCollection, route.value.id);
+    await updateDoc(docRef, {
+      ratings: [
+        ...route.value.ratings.filter(rating => rating.user !== user.value.email),
+        {
+          rating: value,
+          date: new Date().toISOString(),
+          user: user.value.email,
+        },
+      ],
+    });
+  }, { debounce: 500, maxWait: 2500 });
+});
 </script>
