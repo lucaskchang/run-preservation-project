@@ -4,7 +4,7 @@
       Run Preservation Project Ratings
     </p>
     <p class="mt-4 text-2xl">
-      Rate and review all the routes on the RPP
+      Rate all the routes on the RPP
     </p>
     <UButton
       icon="i-mdi-google"
