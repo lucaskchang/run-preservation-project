@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   const user = useCurrentUser();
   if (!user.value && to.path !== '/') {
     return navigateTo('/?redirect=' + to.path);

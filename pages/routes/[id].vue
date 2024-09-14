@@ -29,11 +29,16 @@
       <div class="flex flex-row items-center space-x-4 md:mx-12">
         <URange
           v-model="rating"
+          size="2xl"
           :min="0"
           :max="100"
+          :color="getRatingColor(rating)?.split('-')[1]"
         />
         <p>
-          Your rating: {{ rating === -1 ? 'N/A' : rating }}
+          Your rating: <span
+            class="font-bold"
+            :class="getRatingColor(rating)"
+          >{{ rating === -1 ? 'No rating' : rating }}</span>
         </p>
       </div>
       <div class="text-left">

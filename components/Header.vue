@@ -33,8 +33,8 @@ const userInfo = computed(() => {
     };
   }
   return {
-    pfp: '/default-pfp.png',
-    username: 'Anonymous',
+    pfp: '',
+    username: 'Not logged in',
     email: '',
   };
 });
