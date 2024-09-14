@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Bay Clock 3',
+      title: 'Run Preservation Project',
       htmlAttrs: {
         lang: 'en',
       },
@@ -71,7 +71,6 @@ export default defineNuxtConfig({
         for (const page of pages) {
           if (page.name !== 'index') {
             page.meta ||= {};
-            // Note that this will override any middleware set in `definePageMeta` in the page
             page.meta.middleware = ['auth'];
           }
           if (page.children) {

@@ -2,7 +2,7 @@
   <div
     v-if="routes.length > 0"
   >
-    <div class="mb-4 flex flex-row items-center justify-between">
+    <div class="mb-4 flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
       <UInput
         v-model="search"
         leading-icon="i-mdi-magnify"
@@ -22,9 +22,9 @@
     >
       <NuxtLink
         :to="`/routes/${route.id}`"
-        class="flex flex-row items-center justify-between border-b border-gray-200 px-4 py-2 dark:border-gray-800"
+        class="flex flex-row items-center justify-between border-b border-gray-200 p-2 md:px-4 dark:border-gray-800"
       >
-        <p class="text-lg font-bold">
+        <p class="font-bold md:text-lg">
           {{ route.name }}
           <span
             class="text-sm"
@@ -33,7 +33,7 @@
             {{ averageRating(route.ratings) === -1 ? 'No ratings' : averageRating(route.ratings).toFixed(2) }}
           </span>
         </p>
-        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+        <p class="font-semibold text-gray-700 md:text-lg dark:text-gray-200">
           {{ route.region }} | {{ route.distance }} miles
         </p>
       </Nuxtlink>
@@ -61,19 +61,12 @@
 <script setup lang="ts">
 import { useRoutesStore } from '~/stores/routes';
 
-const ratingColorKey = {
-  20: 'text-red-700',
-  40: 'text-red-500',
-  60: 'text-yellow-500',
-  80: 'text-green-500',
-  100: 'text-green-700',
-};
-
 const routesStore = useRoutesStore();
 const { routes } = storeToRefs(routesStore);
 const page = ref(0);
 function averageRating(ratings) {
   const avg = ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
+  if (avg === 0) return 0;
   return avg ? avg : -1;
 }
 
@@ -101,15 +94,6 @@ const sortedFilteredRoutes = computed(() => {
   }
   return sortedRoutes.filter(route => route.name.toLowerCase().includes(search.value.toLowerCase()));
 });
-
-function getRatingColor(rating: number) {
-  if (rating === -1) {
-    return 'text-gray-700 dark:text-gray-200';
-  }
-  return Object.entries(ratingColorKey)
-    .find(([key]) => Math.round(rating) <= parseInt(key))
-    ?.[1];
-}
 
 const sortOptions = ['Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)'];
 const sort = ref('Rating (High-Low)');

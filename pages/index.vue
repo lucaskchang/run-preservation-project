@@ -18,18 +18,29 @@
 
 <script setup lang="ts">
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
+import { useUsersStore } from '~/stores/users';
 
 const user = useCurrentUser();
+const usersStore = useUsersStore();
+const { users } = storeToRefs(usersStore);
 const route = useRoute();
 
 function login() {
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
   signInWithPopup(auth, provider)
-    .then(() => {
+    .then(async () => {
+      if (!users.value.find(userTemp => userTemp.email === user.value.email)) {
+        const db = useFirestore();
+        const usersCollection = collection(db, 'users');
+        await addDoc(usersCollection, {
+          email: user.value.email,
+          name: user.value.displayName,
+          pfp: user.value.photoURL,
+        });
+      }
       navigateTo('/home');
-    }).catch((error) => {
-      console.log(error);
     });
 }
 
