@@ -79,7 +79,8 @@ const route = computed(() => {
   return foundRoute;
 });
 
-watchDebounced(rating, async (value) => {
+watchDebounced(rating, async (value, oldValue) => {
+  if (value === oldValue) return;
   const docRef = doc(routesCollection, route.value.id);
   await updateDoc(docRef, {
     ratings: [
