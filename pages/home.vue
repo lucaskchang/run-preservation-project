@@ -28,9 +28,9 @@
           {{ route.name }}
           <span
             class="text-sm"
-            :class="getRatingColor(averageRating(route.ratings))"
+            :class="getRatingColor(getAverageRating(route.ratings))"
           >
-            {{ averageRating(route.ratings) === -1 ? 'No ratings' : averageRating(route.ratings).toFixed(2) }}
+            {{ getAverageRating(route.ratings) === -1 ? 'No ratings' : getAverageRating(route.ratings).toFixed(2) }}
           </span>
         </p>
         <p class="font-semibold text-gray-700 md:text-lg dark:text-gray-200">
@@ -64,11 +64,6 @@ import { useRoutesStore } from '~/stores/routes';
 const routesStore = useRoutesStore();
 const { routes } = storeToRefs(routesStore);
 const page = ref(0);
-function averageRating(ratings) {
-  const avg = ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
-  if (avg === 0) return 0;
-  return avg ? avg : -1;
-}
 
 const sortedFilteredRoutes = computed(() => {
   const sortedRoutes = [...routes.value];
@@ -80,10 +75,10 @@ const sortedFilteredRoutes = computed(() => {
       sortedRoutes.sort((a, b) => b.name.localeCompare(a.name));
       break;
     case 'Rating (Low-High)':
-      sortedRoutes.sort((a, b) => averageRating(a.ratings) - averageRating(b.ratings));
+      sortedRoutes.sort((a, b) => getAverageRating(a.ratings) - getAverageRating(b.ratings));
       break;
     case 'Rating (High-Low)':
-      sortedRoutes.sort((a, b) => averageRating(b.ratings) - averageRating(a.ratings));
+      sortedRoutes.sort((a, b) => getAverageRating(b.ratings) - getAverageRating(a.ratings));
       break;
     case 'Distance (Low-High)':
       sortedRoutes.sort((a, b) => a.distance - b.distance);

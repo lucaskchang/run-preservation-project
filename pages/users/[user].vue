@@ -13,10 +13,16 @@
         {{ user.email }}
       </p>
       <p>
-        Total Ratings: {{ ratings.length }} | Avg. Rating: {{ (ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length).toFixed(2) }}
+        Total Ratings: <span class="font-bold">{{ ratings.length }}</span> | Avg. Rating:
+        <span
+          class="font-bold"
+          :class="getRatingColor(ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length)"
+        >
+          {{ (ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length).toFixed(2) }}
+        </span>
       </p>
     </div>
-    <div class="mx-auto mt-8 flex flex-col justify-center space-x-8 md:w-2/3 md:flex-row 2xl:w-1/2">
+    <div class="mx-auto mt-8 flex flex-col justify-center md:w-2/3 md:flex-row md:space-x-8 2xl:w-1/2">
       <div>
         <p class="text-2xl font-bold">
           All Ratings
@@ -42,7 +48,7 @@
           </NuxtLink>
         </div>
       </div>
-      <div>
+      <div class="mt-8 md:mt-0">
         <p class="text-2xl font-bold">
           Highest Rating
         </p>
@@ -130,7 +136,7 @@ const highestRating = computed(() => {
 });
 
 const lowestRating = computed(() => {
-  let lowest = { rating: 6 };
+  let lowest = { rating: 101 };
   for (const rating of ratings.value) {
     if (rating.rating < lowest.rating) {
       lowest = rating;

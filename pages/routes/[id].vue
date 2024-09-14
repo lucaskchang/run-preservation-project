@@ -9,7 +9,12 @@
           {{ route.name }}
         </p>
         <p class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          {{ route.region }} | {{ route.distance }} miles
+          {{ route.region }} | {{ route.distance }} miles | Avg. Rating: <span
+            class="font-bold"
+            :class="getRatingColor(getAverageRating(route.ratings))"
+          >
+            {{ getAverageRating(route.ratings) === -1 ? 'No ratings' : getAverageRating(route.ratings).toFixed(2) }}
+          </span>
         </p>
       </div>
       <iframe
@@ -32,7 +37,6 @@
           size="2xl"
           :min="0"
           :max="100"
-          :color="getRatingColor(rating)?.split('-')[1]"
         />
         <p>
           Your rating: <span
