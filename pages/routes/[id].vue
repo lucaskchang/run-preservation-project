@@ -58,7 +58,7 @@
             :to="`/users/${review.user.email}`"
             class="mt-2"
           >
-            <div class="flex flex-row items-center justify-between border-b border-gray-200 px-2 py-3 dark:border-gray-800">
+            <div class="flex flex-row items-center justify-between rounded border-b border-gray-200 px-2 py-3 hover:bg-gray-200 dark:border-gray-800 dark:hover:bg-gray-800">
               <div class="flex flex-row space-x-2">
                 <img
                   :src="review.user.pfp"
@@ -154,5 +154,4 @@ watchDebounced(rating, async (value, oldValue) => {
     ],
   });
 }, { debounce: 500, maxWait: 2500 });
-
 </script>

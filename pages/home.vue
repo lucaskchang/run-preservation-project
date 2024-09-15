@@ -22,7 +22,7 @@
     >
       <NuxtLink
         :to="`/routes/${route.id}`"
-        class="flex flex-row items-center justify-between border-b border-gray-200 p-2 md:px-4 dark:border-gray-800"
+        class="flex flex-row items-center justify-between rounded border-b border-gray-200 p-2 hover:bg-gray-200 md:px-4 dark:border-gray-800 dark:hover:bg-gray-800"
       >
         <p class="font-bold md:text-lg">
           {{ route.name }}
