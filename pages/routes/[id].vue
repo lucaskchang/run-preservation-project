@@ -67,7 +67,7 @@
                 >
                 <div class="flex flex-col justify-center">
                   <p class="font-bold">
-                    {{ review.user.name }} <span class="text-sm font-normal text-gray-700 dark:text-gray-200"> {{ new Date(review.date).toLocaleDateString() }}</span>
+                    {{ review.user.name }} <span class="text-sm font-normal text-gray-700 dark:text-gray-200"> {{ new Date(review.date).toLocaleString() }}</span>
                   </p>
                   <p
                     class="-mt-1 text-gray-600 dark:text-gray-300"
@@ -139,20 +139,20 @@ const populatedRatings = computed(() => {
   return output;
 });
 
-onMounted(() => {
-  watchDebounced(rating, async (value, oldValue) => {
-    if (value === oldValue || value === -1) return;
-    const docRef = doc(routesCollection, route.value.id);
-    await updateDoc(docRef, {
-      ratings: [
-        ...route.value.ratings.filter(rating => rating.user !== user.value.email),
-        {
-          rating: value,
-          date: new Date().toISOString(),
-          user: user.value.email,
-        },
-      ],
-    });
-  }, { debounce: 500, maxWait: 2500 });
-});
+watchDebounced(rating, async (value, oldValue) => {
+  if (value === oldValue || oldValue === -1) return;
+  console.log (oldValue, value);
+  const docRef = doc(routesCollection, route.value.id);
+  await updateDoc(docRef, {
+    ratings: [
+      ...route.value.ratings.filter(rating => rating.user !== user.value.email),
+      {
+        rating: value,
+        date: new Date().toISOString(),
+        user: user.value.email,
+      },
+    ],
+  });
+}, { debounce: 500, maxWait: 2500 });
+
 </script>
