@@ -52,7 +52,7 @@
         Page {{ page + 1 }}
       </p>
       <UButton
-        v-if="page < routes.length / 25 - 1"
+        v-if="page < sortedFilteredRoutes.length / 25 - 1"
         @click="page++"
       >
         Next
@@ -108,4 +108,10 @@ const sortedFilteredRoutes = computed(() => {
 const sortOptions = ['Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)', '# of Ratings (Low-High)', '# of Ratings (High-Low)'];
 const sort = ref('Rating (High-Low)');
 const search = ref('');
+
+watch([sort, search], () => {
+  if (page.value > sortedFilteredRoutes.value.length / 25 - 1) {
+    page.value = Math.floor(sortedFilteredRoutes.value.length / 25);
+  }
+});
 </script>
