@@ -32,7 +32,7 @@
           >
             {{ getAverageRating(route.ratings) === -1 ? ' No ratings' : ` ${getAverageRating(route.ratings).toFixed(2)}` }}
           </span>
-          <span class="text-sm text-gray-700 dark:text-gray-200">
+          <span class="text-sm text-gray-500 dark:text-gray-400">
             {{ route.ratings.length > 0 ? ` ${route.ratings.length}` : '' }}
           </span>
         </p>
