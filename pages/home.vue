@@ -17,7 +17,7 @@
       />
     </div>
     <div
-      v-for="(route, index) in sortedFilteredRoutes.slice(page * 25, page * 25 + 25)"
+      v-for="route in sortedFilteredRoutes.slice(page * 25, page * 25 + 25)"
       :key="route.id"
     >
       <NuxtLink
@@ -25,15 +25,7 @@
         class="flex flex-row items-center justify-between rounded border-b border-gray-200 p-2 hover:bg-gray-200 md:px-4 dark:border-gray-800 dark:hover:bg-gray-800"
       >
         <p class="font-bold md:text-lg">
-          <span
-            :class="{
-              'text-[#daa520]': index === 0 && page === 0,
-              'text-[#a9a9a9]': index === 1 && page === 0,
-              'text-[#cd7f32]': index === 2 && page === 0,
-            }"
-          >
-            {{ route.name }}
-          </span>
+          {{ route.name }}
           <span
             class="text-sm"
             :class="getRatingColor(getAverageRating(route.ratings))"
