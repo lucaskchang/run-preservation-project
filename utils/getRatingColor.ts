@@ -11,6 +11,6 @@ export default function (rating: number) {
     return 'text-gray-700 dark:text-gray-200';
   }
   return Object.entries(ratingColorKey)
-    .find(([key]) => Math.floor(rating) < parseInt(key))
+    .find(([key]) => Math.floor(rating) <= parseInt(key))
     ?.[1];
 }
