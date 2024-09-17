@@ -55,6 +55,17 @@ watch(() => user.value, (value) => {
   }
 });
 
+onMounted(() => {
+  if (user.value) {
+    if (route.query.redirect) {
+      navigateTo(route.query.redirect as string);
+    }
+    else {
+      navigateTo('/home');
+    }
+  }
+});
+
 definePageMeta({
   layout: false,
 });

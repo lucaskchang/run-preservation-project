@@ -55,7 +55,10 @@
         </p>
       </Nuxtlink>
     </div>
-    <div class="mt-4 flex flex-row items-center justify-between">
+    <div
+      v-if="ratings.length > 25"
+      class="mt-4 flex flex-row items-center justify-between"
+    >
       <UButton
         v-if="page > 0"
         @click="page--"
