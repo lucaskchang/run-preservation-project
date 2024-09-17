@@ -1,5 +1,3 @@
-# Nuxt Boilerplate
+# Run Preservation Project
 
-Nuxt boilerplate including Nuxt.js, TailwindCSS, Pinia, VueUse, and ESlint!
-
-View it here: [https://boilerplate.lucaskchang.com/](https://boilerplate.lucaskchang.com/)
+View it here: [https://runpreservationproject.vercel.app/](https://runpreservationproject.vercel.app/)
