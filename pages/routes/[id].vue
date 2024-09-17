@@ -153,5 +153,5 @@ watchDebounced(rating, async (value, oldValue) => {
       },
     ],
   });
-}, { debounce: 500, maxWait: 2500 });
+}, { debounce: 500 });
 </script>

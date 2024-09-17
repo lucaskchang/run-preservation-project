@@ -17,7 +17,7 @@
       />
     </div>
     <div
-      v-for="route in sortedFilteredRoutes.slice(page * 25, page * 25 + 25)"
+      v-for="(route, index) in sortedFilteredRoutes.slice(page * 25, page * 25 + 25)"
       :key="route.id"
     >
       <NuxtLink
@@ -25,12 +25,23 @@
         class="flex flex-row items-center justify-between rounded border-b border-gray-200 p-2 hover:bg-gray-200 md:px-4 dark:border-gray-800 dark:hover:bg-gray-800"
       >
         <p class="font-bold md:text-lg">
-          {{ route.name }}
+          <span
+            :class="{
+              'text-[#daa520]': index === 0 && page === 0,
+              'text-[#a9a9a9]': index === 1 && page === 0,
+              'text-[#cd7f32]': index === 2 && page === 0,
+            }"
+          >
+            {{ route.name }}
+          </span>
           <span
             class="text-sm"
             :class="getRatingColor(getAverageRating(route.ratings))"
           >
-            {{ getAverageRating(route.ratings) === -1 ? 'No ratings' : getAverageRating(route.ratings).toFixed(2) }}
+            {{ getAverageRating(route.ratings) === -1 ? ' No ratings' : ` ${getAverageRating(route.ratings).toFixed(2)}` }}
+          </span>
+          <span class="text-sm text-gray-700 dark:text-gray-200">
+            {{ route.ratings.length > 0 ? ` ${route.ratings.length}` : '' }}
           </span>
         </p>
         <p class="font-semibold text-gray-700 md:text-lg dark:text-gray-200">
@@ -75,7 +86,13 @@ const sortedFilteredRoutes = computed(() => {
       sortedRoutes.sort((a, b) => b.name.localeCompare(a.name));
       break;
     case 'Rating (Low-High)':
-      sortedRoutes.sort((a, b) => getAverageRating(a.ratings) - getAverageRating(b.ratings));
+      sortedRoutes.sort((a, b) => {
+        const aRating = getAverageRating(a.ratings);
+        const bRating = getAverageRating(b.ratings);
+        if (aRating === -1) return 1;
+        if (bRating === -1) return -1;
+        return aRating - bRating;
+      });
       break;
     case 'Rating (High-Low)':
       sortedRoutes.sort((a, b) => getAverageRating(b.ratings) - getAverageRating(a.ratings));
@@ -86,11 +103,17 @@ const sortedFilteredRoutes = computed(() => {
     case 'Distance (High-Low)':
       sortedRoutes.sort((a, b) => b.distance - a.distance);
       break;
+    case '# of Ratings (Low-High)':
+      sortedRoutes.sort((a, b) => a.ratings.length - b.ratings.length);
+      break;
+    case '# of Ratings (High-Low)':
+      sortedRoutes.sort((a, b) => b.ratings.length - a.ratings.length);
+      break;
   }
   return sortedRoutes.filter(route => route.name.toLowerCase().includes(search.value.toLowerCase()));
 });
 
-const sortOptions = ['Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)'];
+const sortOptions = ['Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)', '# of Ratings (Low-High)', '# of Ratings (High-Low)'];
 const sort = ref('Rating (High-Low)');
 const search = ref('');
 </script>
