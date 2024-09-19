@@ -47,6 +47,7 @@
           </p>
         </div>
         <UButton
+          v-if="rating !== -1"
           color="red"
           @click="removeRating"
         >
