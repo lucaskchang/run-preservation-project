@@ -8,7 +8,19 @@
         leading-icon="i-mdi-magnify"
         placeholder="Search for a route..."
         class="w-full md:w-1/3"
-      />
+        :ui="{ icon: { trailing: { pointer: '' } } }"
+      >
+        <template #trailing>
+          <UButton
+            v-show="search !== ''"
+            color="gray"
+            variant="link"
+            icon="i-heroicons-x-mark-20-solid"
+            :padded="false"
+            @click="search = ''"
+          />
+        </template>
+      </UInput>
       <USelect
         v-model="sort"
         leading-icon="i-mdi-sort-variant"
@@ -70,7 +82,6 @@ const searchStore = useSearchStore();
 const { routes } = storeToRefs(routesStore);
 const { search, sort } = storeToRefs(searchStore);
 const page = ref(0);
-const route = useRoute();
 
 const sortedFilteredRoutes = computed(() => {
   const sortedRoutes = [...routes.value];
@@ -91,7 +102,12 @@ const sortedFilteredRoutes = computed(() => {
       });
       break;
     case 'Rating (High-Low)':
-      sortedRoutes.sort((a, b) => getAverageRating(b.ratings) - getAverageRating(a.ratings));
+      sortedRoutes.sort((a, b) => {
+        const aRating = getAverageRating(a.ratings);
+        const bRating = getAverageRating(b.ratings);
+        if (aRating === bRating) return b.ratings.length - a.ratings.length;
+        return bRating - aRating;
+      });
       break;
     case 'Distance (Low-High)':
       sortedRoutes.sort((a, b) => a.distance - b.distance);
@@ -103,7 +119,12 @@ const sortedFilteredRoutes = computed(() => {
       sortedRoutes.sort((a, b) => a.ratings.length - b.ratings.length);
       break;
     case '# of Ratings (High-Low)':
-      sortedRoutes.sort((a, b) => b.ratings.length - a.ratings.length);
+      sortedRoutes.sort((a, b) => {
+        if (a.ratings.length === b.ratings.length) {
+          return getAverageRating(b.ratings) - getAverageRating(a.ratings);
+        }
+        return b.ratings.length - a.ratings.length;
+      });
       break;
   }
   return sortedRoutes.filter(route => route.name.toLowerCase().includes(search.value.toLowerCase()));
