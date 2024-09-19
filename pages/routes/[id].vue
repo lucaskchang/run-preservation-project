@@ -31,19 +31,27 @@
       <p class="text-lg italic text-gray-700 dark:text-gray-200">
         {{ route.notes }}
       </p>
-      <div class="flex flex-row items-center space-x-4 md:mx-12">
-        <URange
-          v-model="rating"
-          size="2xl"
-          :min="0"
-          :max="100"
-        />
-        <p>
-          Your rating: <span
-            class="font-bold"
-            :class="getRatingColor(rating)"
-          >{{ rating === -1 ? 'No rating' : rating }}</span>
-        </p>
+      <div class="flex flex-col items-center space-y-2 md:mx-8 md:flex-row md:space-x-4 md:space-y-0">
+        <div class="flex w-full flex-row">
+          <URange
+            v-model="rating"
+            size="2xl"
+            :min="0"
+            :max="100"
+          />
+          <p>
+            Your rating: <span
+              class="font-bold"
+              :class="getRatingColor(rating)"
+            >{{ rating === -1 ? 'No rating' : rating }}</span>
+          </p>
+        </div>
+        <UButton
+          color="red"
+          @click="removeRating"
+        >
+          Remove Rating
+        </UButton>
       </div>
       <div class="text-left">
         <p class="text-2xl font-bold">
@@ -138,6 +146,13 @@ const populatedRatings = computed(() => {
   }
   return output;
 });
+
+function removeRating() {
+  const docRef = doc(routesCollection, route.value.id);
+  updateDoc(docRef, {
+    ratings: route.value.ratings.filter(rating => rating.user !== user.value.email),
+  });
+}
 
 watchDebounced(rating, async (value, oldValue) => {
   if (value === oldValue || oldValue === -1) return;

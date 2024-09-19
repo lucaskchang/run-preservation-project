@@ -63,10 +63,14 @@
 
 <script setup lang="ts">
 import { useRoutesStore } from '~/stores/routes';
+import { useSearchStore } from '~/stores/searchStore';
 
 const routesStore = useRoutesStore();
+const searchStore = useSearchStore();
 const { routes } = storeToRefs(routesStore);
+const { search, sort } = storeToRefs(searchStore);
 const page = ref(0);
+const route = useRoute();
 
 const sortedFilteredRoutes = computed(() => {
   const sortedRoutes = [...routes.value];
@@ -106,10 +110,8 @@ const sortedFilteredRoutes = computed(() => {
 });
 
 const sortOptions = ['Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)', '# of Ratings (Low-High)', '# of Ratings (High-Low)'];
-const sort = ref('Rating (High-Low)');
-const search = ref('');
 
-watch([sort, search], () => {
+watch(search, () => {
   if (page.value > sortedFilteredRoutes.value.length / 25 - 1) {
     page.value = Math.floor(sortedFilteredRoutes.value.length / 25);
   }
