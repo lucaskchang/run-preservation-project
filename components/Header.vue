@@ -17,7 +17,17 @@
         </div>
       </div>
     </NuxtLink>
-    <ColorMode />
+    <div class="flex flex-row items-center space-x-2">
+      <UButton
+        :padded="false"
+        icon="i-mdi-users"
+        color="gray"
+        variant="link"
+        size="xl"
+        to="/accounts"
+      />
+      <ColorMode />
+    </div>
   </div>
 </template>
 
