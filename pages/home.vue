@@ -80,8 +80,7 @@ import { useSearchStore } from '~/stores/searchStore';
 const routesStore = useRoutesStore();
 const searchStore = useSearchStore();
 const { routes } = storeToRefs(routesStore);
-const { search, sort } = storeToRefs(searchStore);
-const page = ref(0);
+const { search, sort, page } = storeToRefs(searchStore);
 
 const sortedFilteredRoutes = computed(() => {
   const sortedRoutes = [...routes.value];
