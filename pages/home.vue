@@ -85,6 +85,17 @@ const { search, sort, page } = storeToRefs(searchStore);
 const sortedFilteredRoutes = computed(() => {
   const sortedRoutes = [...routes.value];
   switch (sort.value) {
+    case 'Best':
+      const maxRatings = Math.max(...sortedRoutes.map(route => route.ratings.length));
+      console.log(maxRatings);
+      sortedRoutes.sort((a, b) => {
+        const aRating = 0.5 * getAverageRating(a.ratings) + 0.5 * (a.ratings.length / maxRatings);
+        const bRating = 0.5 * getAverageRating(b.ratings) + 0.5 * (b.ratings.length / maxRatings);
+        if (aRating === -1) return 1;
+        if (bRating === -1) return -1;
+        return bRating - aRating;
+      });
+      break;
     case 'Name (A-Z)':
       sortedRoutes.sort((a, b) => a.name.localeCompare(b.name));
       break;
@@ -129,7 +140,7 @@ const sortedFilteredRoutes = computed(() => {
   return sortedRoutes.filter(route => route.name.toLowerCase().includes(search.value.toLowerCase()));
 });
 
-const sortOptions = ['Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)', '# of Ratings (Low-High)', '# of Ratings (High-Low)'];
+const sortOptions = ['Best', 'Name (A-Z)', 'Name (Z-A)', 'Rating (Low-High)', 'Rating (High-Low)', 'Distance (Low-High)', 'Distance (High-Low)', '# of Ratings (Low-High)', '# of Ratings (High-Low)'];
 
 watch(search, () => {
   if (page.value > sortedFilteredRoutes.value.length / 25 - 1) {
